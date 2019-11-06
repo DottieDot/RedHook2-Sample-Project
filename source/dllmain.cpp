@@ -1,7 +1,9 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include <Windows.h>
 #include <redhook2.h>
+#include <stdio.h>
 
+#include "keyboard.hpp"
 #include "script.hpp"
 
 BOOL APIENTRY DllMain(HMODULE hModule,
@@ -13,16 +15,14 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		scriptRegister(hModule, ScriptMain);
-		// See comments in script.cpp
-		// keyboardHandlerRegister(OnKeyboardMessage);
+		keyboardHandlerRegister(OnKeyboardMessage);
 		break;
 	case DLL_THREAD_ATTACH:
 	case DLL_THREAD_DETACH:
 		break;
 	case DLL_PROCESS_DETACH:
 		scriptUnregister(hModule);
-		// See comments in script.cpp
-		// keyboardHandlerUnregister(OnKeyboardMessage);
+		keyboardHandlerUnregister(OnKeyboardMessage);
 		break;
 	}
 	return TRUE;
