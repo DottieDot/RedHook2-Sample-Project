@@ -9,31 +9,38 @@
 #    define RH2_API __declspec(dllimport)
 #endif
 
-typedef void (*KeyboardHandler)(uint32_t keyCode,
-	uint16_t repeats,
-	uint8_t  scanCode,
-	bool     isExtended,
-	bool     isWithAlt,
-	bool     wasDownBefore,
-	bool     isUpNow);
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+	typedef void (*KeyboardHandler)(uint32_t keyCode,
+		uint16_t repeats,
+		uint8_t  scanCode,
+		bool     isExtended,
+		bool     isWithAlt,
+		bool     wasDownBefore,
+		bool     isUpNow);
 
-RH2_API void keyboardHandlerRegister(KeyboardHandler handler);
+	RH2_API void keyboardHandlerRegister(KeyboardHandler handler);
 
-RH2_API void keyboardHandlerUnregister(KeyboardHandler handler);
+	RH2_API void keyboardHandlerUnregister(KeyboardHandler handler);
 
-RH2_API void scriptWait(DWORD time);
+	RH2_API void scriptWait(DWORD time);
 
-RH2_API void scriptRegister(HMODULE module, void (*LP_SCRIPT_MAIN)());
+	RH2_API void scriptRegister(HMODULE module, void (*LP_SCRIPT_MAIN)());
 
-RH2_API void scriptRegisterAdditionalThread(HMODULE module, void (*LP_SCRIPT_MAIN)());
+	RH2_API void scriptRegisterAdditionalThread(HMODULE module, void (*LP_SCRIPT_MAIN)());
 
-RH2_API void scriptUnregister(HMODULE module);
+	RH2_API void scriptUnregister(HMODULE module);
 
-RH2_API void nativeInit(UINT64 hash);
+	RH2_API void nativeInit(UINT64 hash);
 
-RH2_API void nativePush64(UINT64 val);
+	RH2_API void nativePush64(UINT64 val);
 
-RH2_API PUINT64 nativeCall();
+	RH2_API PUINT64 nativeCall();
+#ifdef __cplusplus
+}
+#endif
 
 #ifdef __cplusplus
 #    ifndef RH2_EXPORTS
@@ -57,7 +64,7 @@ namespace invoker
 	}
 
 	template<typename R, typename... Args>
-	static R Invoke(uint64_t hash, const Args&... args)
+	static R Invoke(UINT64 hash, const Args&... args)
 	{
 		NativeInit(hash);
 		(NativePush(args), ...);
